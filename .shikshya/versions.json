@@ -2,5 +2,15 @@
   "project_name": "bakery_preorder_app",
   "current_version": "1.0",
   "current_generation": 1,
-  "versions": []
+  "versions": [
+    {
+      "version": "1.0",
+      "phase": "init",
+      "commit_hash": "6ccc309",
+      "message": "Initial project creation - bakery_preorder_app",
+      "timestamp": "2026-10-21T23:49:07.531488+00:00",
+      "files_changed": 2,
+      "generation_id": 1
+    }
+  ]
 }

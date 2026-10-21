@@ -1,0 +1,1185 @@
+{
+  "name": "bakery_preorder_app",
+  "description": "A bakery pre-order platform where customers browse cakes and pastries, build orders, schedule pickup, and pay online",
+  "tech": {
+    "backend_port": 8000,
+    "frontend_port": 3000,
+    "api_base_url": "http://localhost:8000/api",
+    "auth_strategy": "jwt",
+    "state_management": "context",
+    "database": "sqlite3",
+    "css_framework": "tailwind",
+    "project_type": "fullstack_express",
+    "game_engine": "",
+    "game_interfaces": {},
+    "frontend_framework": "react",
+    "python_packages": [],
+    "node_packages": {
+      "axios": "^1.6.0",
+      "react-router-dom": "^6.20.0",
+      "express": "^4.19.2",
+      "prisma": "^5.14.0",
+      "@prisma/client": "^5.14.0",
+      "bcrypt": "^5.1.1",
+      "jsonwebtoken": "^9.0.2",
+      "passport": "^0.7.0",
+      "passport-google-oauth20": "^2.0.0",
+      "stripe": "^15.7.0",
+      "cors": "^2.8.5",
+      "dotenv": "^16.4.5"
+    },
+    "typescript": true,
+    "user_roles": [],
+    "production_security": true,
+    "google_oauth": true,
+    "payments": true,
+    "payments_effect": false
+  },
+  "models": [
+    {
+      "name": "User",
+      "app_label": "api",
+      "fields": [
+        {
+          "name": "email",
+          "type": "EmailField",
+          "kwargs": {
+            "unique": "True"
+          }
+        },
+        {
+          "name": "password_hash",
+          "type": "CharField",
+          "kwargs": {
+            "max_length": "255",
+            "blank": "True",
+            "null": "True"
+          }
+        },
+        {
+          "name": "google_id",
+          "type": "CharField",
+          "kwargs": {
+            "max_length": "255",
+            "blank": "True",
+            "null": "True",
+            "unique": "True"
+          }
+        },
+        {
+          "name": "name",
+          "type": "CharField",
+          "kwargs": {
+            "max_length": "150"
+          }
+        },
+        {
+          "name": "is_active",
+          "type": "BooleanField",
+          "kwargs": {
+            "default": "True"
+          }
+        },
+        {
+          "name": "created_at",
+          "type": "DateTimeField",
+          "kwargs": {
+            "auto_now_add": "True"
+          }
+        },
+        {
+          "name": "updated_at",
+          "type": "DateTimeField",
+          "kwargs": {
+            "auto_now": "True"
+          }
+        }
+      ],
+      "meta": {
+        "ordering": "['-created_at']"
+      },
+      "str_field": "email"
+    },
+    {
+      "name": "Category",
+      "app_label": "api",
+      "fields": [
+        {
+          "name": "name",
+          "type": "CharField",
+          "kwargs": {
+            "max_length": "100"
+          }
+        },
+        {
+          "name": "slug",
+          "type": "SlugField",
+          "kwargs": {
+            "unique": "True",
+            "max_length": "120"
+          }
+        },
+        {
+          "name": "created_at",
+          "type": "DateTimeField",
+          "kwargs": {
+            "auto_now_add": "True"
+          }
+        }
+      ],
+      "meta": {
+        "ordering": "['name']"
+      },
+      "str_field": "name"
+    },
+    {
+      "name": "Product",
+      "app_label": "api",
+      "fields": [
+        {
+          "name": "name",
+          "type": "CharField",
+          "kwargs": {
+            "max_length": "200"
+          }
+        },
+        {
+          "name": "description",
+          "type": "TextField",
+          "kwargs": {
+            "blank": "True"
+          }
+        },
+        {
+          "name": "price",
+          "type": "DecimalField",
+          "kwargs": {
+            "max_digits": "8",
+            "decimal_places": "2"
+          }
+        },
+        {
+          "name": "image_url",
+          "type": "URLField",
+          "kwargs": {
+            "blank": "True"
+          }
+        },
+        {
+          "name": "category",
+          "type": "ForeignKey",
+          "kwargs": {
+            "to": "'Category'",
+            "on_delete": "models.CASCADE",
+            "related_name": "'products'"
+          }
+        },
+        {
+          "name": "is_featured",
+          "type": "BooleanField",
+          "kwargs": {
+            "default": "False"
+          }
+        },
+        {
+          "name": "is_available",
+          "type": "BooleanField",
+          "kwargs": {
+            "default": "True"
+          }
+        },
+        {
+          "name": "created_at",
+          "type": "DateTimeField",
+          "kwargs": {
+            "auto_now_add": "True"
+          }
+        },
+        {
+          "name": "updated_at",
+          "type": "DateTimeField",
+          "kwargs": {
+            "auto_now": "True"
+          }
+        }
+      ],
+      "meta": {
+        "ordering": "['-created_at']"
+      },
+      "str_field": "name"
+    },
+    {
+      "name": "Order",
+      "app_label": "api",
+      "fields": [
+        {
+          "name": "order_number",
+          "type": "CharField",
+          "kwargs": {
+            "max_length": "20",
+            "unique": "True"
+          }
+        },
+        {
+          "name": "user",
+          "type": "ForeignKey",
+          "kwargs": {
+            "to": "'User'",
+            "on_delete": "models.CASCADE",
+            "related_name": "'orders'"
+          }
+        },
+        {
+          "name": "pickup_date",
+          "type": "DateTimeField",
+          "kwargs": {}
+        },
+        {
+          "name": "status",
+          "type": "CharField",
+          "kwargs": {
+            "max_length": "20",
+            "default": "'pending'"
+          }
+        },
+        {
+          "name": "total_amount",
+          "type": "DecimalField",
+          "kwargs": {
+            "max_digits": "10",
+            "decimal_places": "2"
+          }
+        },
+        {
+          "name": "stripe_payment_intent",
+          "type": "CharField",
+          "kwargs": {
+            "max_length": "255",
+            "blank": "True",
+            "null": "True"
+          }
+        },
+        {
+          "name": "created_at",
+          "type": "DateTimeField",
+          "kwargs": {
+            "auto_now_add": "True"
+          }
+        },
+        {
+          "name": "updated_at",
+          "type": "DateTimeField",
+          "kwargs": {
+            "auto_now": "True"
+          }
+        }
+      ],
+      "meta": {
+        "ordering": "['-created_at']"
+      },
+      "str_field": "order_number"
+    },
+    {
+      "name": "OrderItem",
+      "app_label": "api",
+      "fields": [
+        {
+          "name": "order",
+          "type": "ForeignKey",
+          "kwargs": {
+            "to": "'Order'",
+            "on_delete": "models.CASCADE",
+            "related_name": "'items'"
+          }
+        },
+        {
+          "name": "product",
+          "type": "ForeignKey",
+          "kwargs": {
+            "to": "'Product'",
+            "on_delete": "models.CASCADE",
+            "related_name": "'order_items'"
+          }
+        },
+        {
+          "name": "quantity",
+          "type": "IntegerField",
+          "kwargs": {
+            "default": "1"
+          }
+        },
+        {
+          "name": "price_at_order",
+          "type": "DecimalField",
+          "kwargs": {
+            "max_digits": "8",
+            "decimal_places": "2"
+          }
+        },
+        {
+          "name": "created_at",
+          "type": "DateTimeField",
+          "kwargs": {
+            "auto_now_add": "True"
+          }
+        }
+      ],
+      "meta": {
+        "ordering": "['id']"
+      },
+      "str_field": "product"
+    }
+  ],
+  "endpoints": [
+    {
+      "path": "/api/categories/",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "view_name": "CategoryViewSet",
+      "serializer": "CategorySerializer",
+      "permissions": [
+        "IsAuthenticatedOrReadOnly"
+      ],
+      "url_name": "category-list",
+      "query_params": [],
+      "is_viewset": true
+    },
+    {
+      "path": "/api/products/",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "view_name": "ProductViewSet",
+      "serializer": "ProductSerializer",
+      "permissions": [
+        "IsAuthenticatedOrReadOnly"
+      ],
+      "url_name": "product-list",
+      "query_params": [],
+      "is_viewset": true
+    },
+    {
+      "path": "/api/orders/",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "view_name": "OrderViewSet",
+      "serializer": "OrderSerializer",
+      "permissions": [
+        "IsAuthenticatedOrReadOnly"
+      ],
+      "url_name": "order-list",
+      "query_params": [],
+      "is_viewset": true
+    },
+    {
+      "path": "/api/auth/register/",
+      "methods": [
+        "POST"
+      ],
+      "view_name": "RegisterView",
+      "serializer": "RegisterSerializer",
+      "permissions": [
+        "IsAuthenticatedOrReadOnly"
+      ],
+      "url_name": "auth-register",
+      "query_params": [],
+      "is_viewset": false
+    },
+    {
+      "path": "/api/auth/login/",
+      "methods": [
+        "POST"
+      ],
+      "view_name": "LoginView",
+      "serializer": "LoginSerializer",
+      "permissions": [
+        "IsAuthenticatedOrReadOnly"
+      ],
+      "url_name": "auth-login",
+      "query_params": [],
+      "is_viewset": false
+    },
+    {
+      "path": "/api/auth/google/",
+      "methods": [
+        "POST"
+      ],
+      "view_name": "GoogleAuthView",
+      "serializer": "GoogleAuthSerializer",
+      "permissions": [
+        "IsAuthenticatedOrReadOnly"
+      ],
+      "url_name": "auth-google",
+      "query_params": [],
+      "is_viewset": false
+    },
+    {
+      "path": "/api/payments/checkout/",
+      "methods": [
+        "POST"
+      ],
+      "view_name": "CheckoutView",
+      "serializer": "CheckoutSerializer",
+      "permissions": [
+        "IsAuthenticatedOrReadOnly"
+      ],
+      "url_name": "payment-checkout",
+      "query_params": [],
+      "is_viewset": false
+    },
+    {
+      "path": "/api/payments/webhook/",
+      "methods": [
+        "POST"
+      ],
+      "view_name": "WebhookView",
+      "serializer": "WebhookSerializer",
+      "permissions": [
+        "IsAuthenticatedOrReadOnly"
+      ],
+      "url_name": "payment-webhook",
+      "query_params": [],
+      "is_viewset": false
+    }
+  ],
+  "components": [
+    {
+      "name": "ProductCard",
+      "file_path": "frontend/src/components/ProductCard.tsx",
+      "props": {
+        "product": "Object",
+        "onAddToCart": "Function"
+      },
+      "imports_from": [
+        "../contexts/CartContext"
+      ],
+      "exports": [
+        "ProductCard"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "CategoryFilter",
+      "file_path": "frontend/src/components/CategoryFilter.tsx",
+      "props": {
+        "categories": "Array",
+        "selectedCategory": "string",
+        "onSelectCategory": "Function"
+      },
+      "imports_from": [],
+      "exports": [
+        "CategoryFilter"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "FeaturedItemsCarousel",
+      "file_path": "frontend/src/components/FeaturedItemsCarousel.tsx",
+      "props": {
+        "items": "Array",
+        "onAddToCart": "Function"
+      },
+      "imports_from": [],
+      "exports": [
+        "FeaturedItemsCarousel"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "CartItemRow",
+      "file_path": "frontend/src/components/CartItemRow.tsx",
+      "props": {
+        "item": "Object",
+        "onUpdateQuantity": "Function",
+        "onRemove": "Function"
+      },
+      "imports_from": [],
+      "exports": [
+        "CartItemRow"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "PickupDatePicker",
+      "file_path": "frontend/src/components/PickupDatePicker.tsx",
+      "props": {
+        "selectedDate": "string",
+        "onChange": "Function"
+      },
+      "imports_from": [],
+      "exports": [
+        "PickupDatePicker"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "OrderSummaryCard",
+      "file_path": "frontend/src/components/OrderSummaryCard.tsx",
+      "props": {
+        "order": "Object"
+      },
+      "imports_from": [],
+      "exports": [
+        "OrderSummaryCard"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "OrderHistoryList",
+      "file_path": "frontend/src/components/OrderHistoryList.tsx",
+      "props": {
+        "orders": "Array"
+      },
+      "imports_from": [],
+      "exports": [
+        "OrderHistoryList"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "GoogleLoginButton",
+      "file_path": "frontend/src/components/GoogleLoginButton.tsx",
+      "props": {
+        "onSuccess": "Function"
+      },
+      "imports_from": [
+        "../contexts/AuthContext"
+      ],
+      "exports": [
+        "GoogleLoginButton"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "HomeHero",
+      "file_path": "frontend/src/components/HomeHero.tsx",
+      "props": {
+        "section": "Hero",
+        "page": "HomePage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "HomeHero"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "HomeFeatured",
+      "file_path": "frontend/src/components/HomeFeatured.tsx",
+      "props": {
+        "section": "Featured products",
+        "page": "HomePage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "HomeFeatured"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "HomeCategories",
+      "file_path": "frontend/src/components/HomeCategories.tsx",
+      "props": {
+        "section": "Browse by category",
+        "page": "HomePage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "HomeCategories"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "HomeAbout",
+      "file_path": "frontend/src/components/HomeAbout.tsx",
+      "props": {
+        "section": "About or testimonials",
+        "page": "HomePage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "HomeAbout"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "HomeCta",
+      "file_path": "frontend/src/components/HomeCta.tsx",
+      "props": {
+        "section": "Call to action",
+        "page": "HomePage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "HomeCta"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "MenuHeader",
+      "file_path": "frontend/src/components/MenuHeader.tsx",
+      "props": {
+        "section": "Page header",
+        "page": "MenuPage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "MenuHeader"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "MenuFilters",
+      "file_path": "frontend/src/components/MenuFilters.tsx",
+      "props": {
+        "section": "Filters and search",
+        "page": "MenuPage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "MenuFilters"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "MenuGrid",
+      "file_path": "frontend/src/components/MenuGrid.tsx",
+      "props": {
+        "section": "Results",
+        "page": "MenuPage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "MenuGrid"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "MenuPagination",
+      "file_path": "frontend/src/components/MenuPagination.tsx",
+      "props": {
+        "section": "Pagination",
+        "page": "MenuPage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "MenuPagination"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "CartHeader",
+      "file_path": "frontend/src/components/CartHeader.tsx",
+      "props": {
+        "section": "Page header",
+        "page": "CartPage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "CartHeader"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "CartItems",
+      "file_path": "frontend/src/components/CartItems.tsx",
+      "props": {
+        "section": "Items",
+        "page": "CartPage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "CartItems"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "CartSummary",
+      "file_path": "frontend/src/components/CartSummary.tsx",
+      "props": {
+        "section": "Summary",
+        "page": "CartPage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "CartSummary"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "CheckoutHeader",
+      "file_path": "frontend/src/components/CheckoutHeader.tsx",
+      "props": {
+        "section": "Page header",
+        "page": "CheckoutPage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "CheckoutHeader"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "CheckoutForm",
+      "file_path": "frontend/src/components/CheckoutForm.tsx",
+      "props": {
+        "section": "Details form",
+        "page": "CheckoutPage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "CheckoutForm"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "CheckoutSummary",
+      "file_path": "frontend/src/components/CheckoutSummary.tsx",
+      "props": {
+        "section": "Order summary",
+        "page": "CheckoutPage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "CheckoutSummary"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "OrderHistoryHeader",
+      "file_path": "frontend/src/components/OrderHistoryHeader.tsx",
+      "props": {
+        "section": "Page header",
+        "page": "OrderHistoryPage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "OrderHistoryHeader"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "OrderHistoryContent",
+      "file_path": "frontend/src/components/OrderHistoryContent.tsx",
+      "props": {
+        "section": "Content",
+        "page": "OrderHistoryPage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "OrderHistoryContent"
+      ],
+      "is_default_export": true
+    },
+    {
+      "name": "OrderHistoryDetails",
+      "file_path": "frontend/src/components/OrderHistoryDetails.tsx",
+      "props": {
+        "section": "Account details",
+        "page": "OrderHistoryPage"
+      },
+      "imports_from": [
+        "../components/ui",
+        "../components/icons"
+      ],
+      "exports": [
+        "OrderHistoryDetails"
+      ],
+      "is_default_export": true
+    }
+  ],
+  "contexts": [
+    {
+      "name": "AuthContext",
+      "file_path": "frontend/src/contexts/AuthContext.tsx",
+      "provider_name": "AuthProvider",
+      "state_shape": {
+        "user": "Object",
+        "token": "string",
+        "isAuthenticated": "boolean"
+      },
+      "actions": [
+        "login",
+        "logout",
+        "register",
+        "loginWithGoogle"
+      ],
+      "hook_name": "useAuth"
+    },
+    {
+      "name": "CartContext",
+      "file_path": "frontend/src/contexts/CartContext.tsx",
+      "provider_name": "CartProvider",
+      "state_shape": {
+        "items": "Array",
+        "total": "number",
+        "itemCount": "number",
+        "pickupDate": "string"
+      },
+      "actions": [
+        "addItem",
+        "removeItem",
+        "updateQuantity",
+        "clearCart",
+        "setPickupDate"
+      ],
+      "hook_name": "useCart"
+    }
+  ],
+  "pages": [
+    {
+      "name": "HomePage",
+      "file_path": "frontend/src/pages/HomePage.tsx",
+      "route": "/",
+      "requires_auth": false,
+      "uses_contexts": [
+        "CartContext"
+      ],
+      "uses_components": [
+        "FeaturedItemsCarousel",
+        "ProductCard",
+        "HomeHero",
+        "HomeFeatured",
+        "HomeCategories",
+        "HomeAbout",
+        "HomeCta"
+      ]
+    },
+    {
+      "name": "MenuPage",
+      "file_path": "frontend/src/pages/MenuPage.tsx",
+      "route": "/menu",
+      "requires_auth": false,
+      "uses_contexts": [
+        "CartContext"
+      ],
+      "uses_components": [
+        "CategoryFilter",
+        "ProductCard",
+        "MenuHeader",
+        "MenuFilters",
+        "MenuGrid",
+        "MenuPagination"
+      ]
+    },
+    {
+      "name": "CartPage",
+      "file_path": "frontend/src/pages/CartPage.tsx",
+      "route": "/cart",
+      "requires_auth": true,
+      "uses_contexts": [
+        "CartContext"
+      ],
+      "uses_components": [
+        "CartItemRow",
+        "PickupDatePicker",
+        "CartHeader",
+        "CartItems",
+        "CartSummary"
+      ]
+    },
+    {
+      "name": "CheckoutPage",
+      "file_path": "frontend/src/pages/CheckoutPage.tsx",
+      "route": "/checkout",
+      "requires_auth": true,
+      "uses_contexts": [
+        "CartContext",
+        "AuthContext"
+      ],
+      "uses_components": [
+        "OrderSummaryCard",
+        "PickupDatePicker",
+        "CheckoutHeader",
+        "CheckoutForm",
+        "CheckoutSummary"
+      ]
+    },
+    {
+      "name": "OrderHistoryPage",
+      "file_path": "frontend/src/pages/OrderHistoryPage.tsx",
+      "route": "/orders",
+      "requires_auth": true,
+      "uses_contexts": [
+        "AuthContext"
+      ],
+      "uses_components": [
+        "OrderHistoryList",
+        "OrderSummaryCard",
+        "OrderHistoryHeader",
+        "OrderHistoryContent",
+        "OrderHistoryDetails"
+      ]
+    },
+    {
+      "name": "LoginPage",
+      "file_path": "frontend/src/pages/LoginPage.tsx",
+      "route": "/login",
+      "requires_auth": false,
+      "uses_contexts": [
+        "AuthContext"
+      ],
+      "uses_components": [
+        "GoogleLoginButton"
+      ]
+    },
+    {
+      "name": "RegisterPage",
+      "file_path": "frontend/src/pages/RegisterPage.tsx",
+      "route": "/register",
+      "requires_auth": false,
+      "uses_contexts": [
+        "AuthContext"
+      ],
+      "uses_components": [
+        "GoogleLoginButton"
+      ]
+    }
+  ],
+  "domains": [
+    {
+      "name": "auth",
+      "description": "User registration, email/password login, and Google OAuth sign-in",
+      "backend_files": [
+        "backend/src/routes/auth.ts",
+        "backend/src/controllers/authController.ts"
+      ],
+      "frontend_files": [
+        "frontend/src/contexts/AuthContext.tsx",
+        "frontend/src/pages/LoginPage.tsx",
+        "frontend/src/pages/RegisterPage.tsx",
+        "frontend/src/components/GoogleLoginButton.tsx"
+      ],
+      "models_owned": [
+        "User"
+      ],
+      "models_read": [],
+      "endpoints_owned": [
+        "/api/auth/register/",
+        "/api/auth/login/",
+        "/api/auth/google/"
+      ],
+      "components_owned": [
+        "GoogleLoginButton"
+      ],
+      "contexts_owned": [
+        "AuthContext"
+      ],
+      "pages_owned": [
+        "LoginPage",
+        "RegisterPage"
+      ]
+    },
+    {
+      "name": "catalog",
+      "description": "Browsing cakes and pastries by category, including featured items on the home page",
+      "backend_files": [
+        "backend/src/routes/catalog.ts",
+        "backend/src/controllers/catalogController.ts"
+      ],
+      "frontend_files": [
+        "frontend/src/components/ProductCard.tsx",
+        "frontend/src/components/CategoryFilter.tsx",
+        "frontend/src/components/FeaturedItemsCarousel.tsx",
+        "frontend/src/components/HomeHero.tsx",
+        "frontend/src/components/HomeFeatured.tsx",
+        "frontend/src/components/HomeCategories.tsx",
+        "frontend/src/components/HomeAbout.tsx",
+        "frontend/src/components/HomeCta.tsx",
+        "frontend/src/pages/HomePage.tsx",
+        "frontend/src/components/MenuHeader.tsx",
+        "frontend/src/components/MenuFilters.tsx",
+        "frontend/src/components/MenuGrid.tsx",
+        "frontend/src/components/MenuPagination.tsx",
+        "frontend/src/pages/MenuPage.tsx"
+      ],
+      "models_owned": [
+        "Category",
+        "Product"
+      ],
+      "models_read": [],
+      "endpoints_owned": [
+        "/api/categories/",
+        "/api/products/"
+      ],
+      "components_owned": [
+        "ProductCard",
+        "CategoryFilter",
+        "FeaturedItemsCarousel",
+        "HomeHero",
+        "HomeFeatured",
+        "HomeCategories",
+        "HomeAbout",
+        "HomeCta",
+        "MenuHeader",
+        "MenuFilters",
+        "MenuGrid",
+        "MenuPagination"
+      ],
+      "contexts_owned": [],
+      "pages_owned": [
+        "HomePage",
+        "MenuPage"
+      ]
+    },
+    {
+      "name": "orders",
+      "description": "Cart management, pickup date scheduling, order placement, and order history",
+      "backend_files": [
+        "backend/src/routes/orders.ts",
+        "backend/src/controllers/orderController.ts"
+      ],
+      "frontend_files": [
+        "frontend/src/contexts/CartContext.tsx",
+        "frontend/src/components/CartItemRow.tsx",
+        "frontend/src/components/PickupDatePicker.tsx",
+        "frontend/src/components/OrderSummaryCard.tsx",
+        "frontend/src/components/OrderHistoryList.tsx",
+        "frontend/src/components/CartHeader.tsx",
+        "frontend/src/components/CartItems.tsx",
+        "frontend/src/components/CartSummary.tsx",
+        "frontend/src/pages/CartPage.tsx",
+        "frontend/src/components/CheckoutHeader.tsx",
+        "frontend/src/components/CheckoutForm.tsx",
+        "frontend/src/components/CheckoutSummary.tsx",
+        "frontend/src/pages/CheckoutPage.tsx",
+        "frontend/src/components/OrderHistoryHeader.tsx",
+        "frontend/src/components/OrderHistoryContent.tsx",
+        "frontend/src/components/OrderHistoryDetails.tsx",
+        "frontend/src/pages/OrderHistoryPage.tsx"
+      ],
+      "models_owned": [
+        "Order",
+        "OrderItem"
+      ],
+      "models_read": [
+        "Product",
+        "User"
+      ],
+      "endpoints_owned": [
+        "/api/orders/"
+      ],
+      "components_owned": [
+        "CartItemRow",
+        "PickupDatePicker",
+        "OrderSummaryCard",
+        "OrderHistoryList",
+        "CartHeader",
+        "CartItems",
+        "CartSummary",
+        "CheckoutHeader",
+        "CheckoutForm",
+        "CheckoutSummary",
+        "OrderHistoryHeader",
+        "OrderHistoryContent",
+        "OrderHistoryDetails"
+      ],
+      "contexts_owned": [
+        "CartContext"
+      ],
+      "pages_owned": [
+        "CartPage",
+        "CheckoutPage",
+        "OrderHistoryPage"
+      ]
+    },
+    {
+      "name": "payments",
+      "description": "Stripe checkout session creation and webhook handling for online payment",
+      "backend_files": [
+        "backend/src/routes/payments.ts",
+        "backend/src/controllers/paymentController.ts"
+      ],
+      "frontend_files": [],
+      "models_owned": [],
+      "models_read": [
+        "Order"
+      ],
+      "endpoints_owned": [
+        "/api/payments/checkout/",
+        "/api/payments/webhook/"
+      ],
+      "components_owned": [],
+      "contexts_owned": [],
+      "pages_owned": []
+    }
+  ],
+  "middleware": [
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware"
+  ],
+  "installed_apps": [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "corsheaders",
+    "django_filters",
+    "api"
+  ]
+}

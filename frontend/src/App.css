@@ -1,0 +1,419 @@
+/* ==========================================================================
+   App.css — Design System Styles
+   Uses CSS variables defined in index.css (--primary, --bg, --surface, etc.)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Layout primitives
+   -------------------------------------------------------------------------- */
+
+.ds-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.ds-container {
+  width: 100%;
+  max-width: var(--container-width, 1200px);
+  margin-inline: auto;
+  padding-inline: var(--space-md, 1.5rem);
+}
+
+.ds-container.ds-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md, 1.5rem);
+}
+
+.ds-page-main {
+  flex: 1;
+  width: 100%;
+  padding-block: var(--space-xl, 2.5rem);
+}
+
+.ds-page-header {
+  padding-block: var(--space-lg, 2rem);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.ds-cluster {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-sm, 0.75rem);
+}
+
+.ds-cluster.ds-between {
+  justify-content: space-between;
+}
+
+.ds-cluster.ds-small {
+  gap: var(--space-xs, 0.5rem);
+  font-size: var(--font-sm, 0.875rem);
+}
+
+.ds-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-lg, 1.5rem);
+}
+
+/* --------------------------------------------------------------------------
+   Typography helpers
+   -------------------------------------------------------------------------- */
+
+.ds-eyebrow {
+  display: inline-block;
+  font-size: var(--font-xs, 0.75rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: var(--space-xs, 0.5rem);
+}
+
+.ds-lead {
+  font-size: var(--font-lg, 1.125rem);
+  line-height: 1.6;
+  color: var(--text-secondary, var(--text));
+  max-width: 60ch;
+}
+
+.ds-muted {
+  color: var(--text-muted, #8a8f98);
+}
+
+.ds-muted.ds-small {
+  font-size: var(--font-sm, 0.875rem);
+}
+
+.ds-help {
+  font-size: var(--font-xs, 0.75rem);
+  color: var(--text-muted, #8a8f98);
+  margin-top: var(--space-xs, 0.25rem);
+}
+
+.ds-label {
+  display: block;
+  font-size: var(--font-sm, 0.875rem);
+  font-weight: 600;
+  margin-bottom: var(--space-xs, 0.4rem);
+  color: var(--text);
+}
+
+/* --------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  font-size: var(--font-sm, 0.95rem);
+  font-weight: 600;
+  border-radius: var(--radius-md, 0.5rem);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  line-height: 1.2;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--primary-contrast, #fff);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover, var(--primary));
+  filter: brightness(1.08);
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--surface-hover, var(--border));
+}
+
+/* --------------------------------------------------------------------------
+   Cards
+   -------------------------------------------------------------------------- */
+
+.ds-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, 0.75rem);
+  overflow: hidden;
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+
+.ds-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.ds-card-body {
+  padding: var(--space-md, 1.25rem);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.ds-card.ds-card-body.ds-stack {
+  gap: var(--space-sm, 0.75rem);
+}
+
+.ds-card-title {
+  font-size: var(--font-md, 1.05rem);
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.ds-card-meta {
+  font-size: var(--font-sm, 0.85rem);
+  color: var(--text-muted, #8a8f98);
+  display: flex;
+  gap: var(--space-xs, 0.5rem);
+  flex-wrap: wrap;
+}
+
+/* --------------------------------------------------------------------------
+   Badges
+   -------------------------------------------------------------------------- */
+
+.ds-badge-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  padding-inline: 0.4rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--primary-contrast, #fff);
+  font-size: var(--font-xs, 0.75rem);
+  font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   Media
+   -------------------------------------------------------------------------- */
+
+.ds-media-square,
+.ds-media.ds-media-square {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--radius-md, 0.5rem);
+  background: var(--surface-alt, #1b1d22);
+}
+
+.ds-media.ds-media-square img,
+.ds-media-sm img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ds-media-sm {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-sm, 0.4rem);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--surface-alt, #1b1d22);
+}
+
+.ds-media.ds-skeleton {
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    var(--surface-alt, #22242b) 37%,
+    var(--surface) 63%
+  );
+  background-size: 400% 100%;
+  animation: ds-shimmer 1.4s ease infinite;
+}
+
+@keyframes ds-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+.ds-media-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+  color: var(--text);
+  font-size: var(--font-xs, 0.7rem);
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  backdrop-filter: blur(4px);
+}
+
+.ds-media-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted, #8a8f98);
+  font-size: 1.5rem;
+  background: var(--surface-alt, #1b1d22);
+}
+
+/* --------------------------------------------------------------------------
+   Cart item
+   -------------------------------------------------------------------------- */
+
+.cart-item-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md, 0.5rem);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--surface-alt, #1b1d22);
+  border: 1px solid var(--border);
+}
+
+.cart-item-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --------------------------------------------------------------------------
+   Hero
+   -------------------------------------------------------------------------- */
+
+.ds-hero {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: center;
+  gap: var(--space-xl, 2.5rem);
+  padding-block: var(--space-xl, 3rem);
+}
+
+.ds-hero-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ds-hero-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0 0 var(--space-md, 1rem);
+  color: var(--text);
+}
+
+.ds-hero-actions {
+  display: flex;
+  gap: var(--space-sm, 0.75rem);
+  margin-top: var(--space-lg, 1.5rem);
+  flex-wrap: wrap;
+}
+
+.ds-hero-media {
+  width: 100%;
+  border-radius: var(--radius-lg, 1rem);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.ds-hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   Navigation
+   -------------------------------------------------------------------------- */
+
+.ds-nav-brand {
+  font-size: var(--font-lg, 1.25rem);
+  font-weight: 800;
+  color: var(--text);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ds-nav-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md, 1.5rem);
+}
+
+.ds-nav-links a {
+  color: var(--text-secondary, var(--text));
+  text-decoration: none;
+  font-size: var(--font-sm, 0.95rem);
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.ds-nav-links a:hover {
+  color: var(--primary);
+}
+
+.ds-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm, 0.75rem);
+}
+
+.ds-nav-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 0.4rem);
+  padding: 0.4rem 0.6rem;
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   Forms
+   -------

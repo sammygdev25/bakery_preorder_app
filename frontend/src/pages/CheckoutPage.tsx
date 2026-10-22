@@ -60,7 +60,7 @@ export default function CheckoutPage() {
       };
       const order = await api.post('/orders/', payload);
       clearCart();
-      navigate('/orders', { state: { newOrderId: order?.id } });
+      navigate('/orders', { state: { newOrderId: order?.data?.id } });
     } catch (err: any) {
       setError(err?.message || 'We could not place your order. Please try again.');
     } finally {

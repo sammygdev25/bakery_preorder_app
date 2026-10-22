@@ -31,7 +31,7 @@ function signToken(userId: number): string {
 function sanitizeUser(user: {
   id: number;
   email: string;
-  name: string;
+  name: string | null;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -39,7 +39,7 @@ function sanitizeUser(user: {
   return {
     id: user.id,
     email: user.email,
-    name: user.name,
+    name: user.name ?? '',
     isActive: user.isActive,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
@@ -65,7 +65,9 @@ export async function registerUser(req: Request, res: Response) {
 
     const user = await prisma.user.create({
       data: {
+        username: email,
         email,
+        password: passwordHash,
         passwordHash,
         name,
       },
@@ -140,11 +142,14 @@ export async function googleAuth(req: Request, res: Response) {
           data: { googleId },
         });
       } else {
+        const randomPassword = await bcrypt.hash(`${googleId}:${Date.now()}`, 10);
         user = await prisma.user.create({
           data: {
+            username: email,
             email,
             name,
             googleId,
+            password: randomPassword,
           },
         });
       }

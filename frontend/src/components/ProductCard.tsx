@@ -10,7 +10,7 @@ interface ProductCardProps {
 function ProductCard({ product, onAddToCart }: ProductCardProps) {
   const { items } = useCart();
   const inCartQty = items
-    .filter((i) => i.productId === product.id)
+    .filter((i) => i.product.id === product.id)
     .reduce((sum, i) => sum + i.quantity, 0);
 
   const handleAddToCart = (e: React.MouseEvent) => {

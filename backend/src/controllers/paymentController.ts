@@ -5,7 +5,7 @@ import prisma from '../database';
 import { AuthRequest } from '../middleware/auth';
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
-const stripe = new Stripe(stripeSecretKey, { apiVersion: '2023-10-16' });
+const stripe = new Stripe(stripeSecretKey);
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
 const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
@@ -104,7 +104,7 @@ export async function webhook(req: Request, res: Response) {
             where: { id: orderId },
             data: {
               status: 'paid',
-              stripePaymentIntent: paymentIntent || null,
+              stripePaymentIntent: paymentIntent || '',
             },
           });
           console.log(`[Payments] Order ${orderId} marked as paid`);

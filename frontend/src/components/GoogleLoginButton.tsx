@@ -23,11 +23,11 @@ function GoogleLoginButton({ onSuccess }: GoogleLoginButtonProps) {
     async (response: { credential: string }) => {
       setError(null);
       try {
-        const data = await api.post('/auth/google/', { token: response.credential });
-        if (data?.token) {
-          localStorage.setItem('token', data.token);
+        const res = await api.post('/auth/google/', { token: response.credential });
+        if (res.data?.token) {
+          localStorage.setItem('token', res.data.token);
         }
-        onSuccess(data);
+        onSuccess(res.data);
       } catch (err) {
         console.error('[GoogleLoginButton] Google sign-in failed:', err);
         setError('Could not sign in with Google. Please try again.');

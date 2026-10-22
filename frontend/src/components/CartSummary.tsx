@@ -20,7 +20,7 @@ export default function CartSummary({ total, itemCount, pickupDate, onCheckout }
             <span className="ds-muted">
               Subtotal ({itemCount} {itemCount === 1 ? 'item' : 'items'})
             </span>
-            <span>${total.toFixed(2)}</span>
+            <span>${Number(total || 0).toFixed(2)}</span>
           </div>
           <div className="ds-between">
             <span className="ds-muted">Pickup fee</span>

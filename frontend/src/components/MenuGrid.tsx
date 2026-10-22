@@ -56,7 +56,7 @@ export default function MenuGrid({ products, loading, onAddToCart, onClearFilter
             />
             <CardBody>
               <CardTitle>{product.name}</CardTitle>
-              {product.category?.name && <CardMeta>{product.category.name}</CardMeta>}
+              {product.category?.name && <CardMeta>{product.category?.name}</CardMeta>}
               {product.description && <CardMeta>{product.description}</CardMeta>}
               <CardFooter>
                 <Price value={product.price} />

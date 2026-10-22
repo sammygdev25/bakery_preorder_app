@@ -1,0 +1,182 @@
+{
+  "project_name": "bakery_preorder_app",
+  "total": 19,
+  "passed": 19,
+  "failed": 0,
+  "skipped": 0,
+  "pass_rate": 100.0,
+  "duration_seconds": 66.2,
+  "results": [
+    {
+      "test_name": "Auth: Login API with demo credentials",
+      "category": "auth",
+      "passed": true,
+      "status_code": 200,
+      "error_message": "",
+      "duration_ms": 166,
+      "screenshot_path": ""
+    },
+    {
+      "test_name": "Auth: Reject invalid credentials",
+      "category": "auth",
+      "passed": true,
+      "status_code": 401,
+      "error_message": "",
+      "duration_ms": 171,
+      "screenshot_path": ""
+    },
+    {
+      "test_name": "Auth: Register endpoint responds",
+      "category": "auth",
+      "passed": true,
+      "status_code": 201,
+      "error_message": "",
+      "duration_ms": 182,
+      "screenshot_path": ""
+    },
+    {
+      "test_name": "Auth: Profile endpoint requires auth",
+      "category": "auth",
+      "passed": true,
+      "status_code": 401,
+      "error_message": "",
+      "duration_ms": 18,
+      "screenshot_path": ""
+    },
+    {
+      "test_name": "Navigation: Home page loads",
+      "category": "navigation",
+      "passed": true,
+      "status_code": 200,
+      "error_message": "",
+      "duration_ms": 8216,
+      "screenshot_path": "/app/data/sandboxes/2/projects/default/bakery_preorder_app/.test-screenshots/navigation_home_page_loads.png"
+    },
+    {
+      "test_name": "Navigation: HomePage loads",
+      "category": "navigation",
+      "passed": true,
+      "status_code": 200,
+      "error_message": "",
+      "duration_ms": 7121,
+      "screenshot_path": "/app/data/sandboxes/2/projects/default/bakery_preorder_app/.test-screenshots/navigation_homepage_loads.png"
+    },
+    {
+      "test_name": "Navigation: MenuPage loads",
+      "category": "navigation",
+      "passed": true,
+      "status_code": 200,
+      "error_message": "",
+      "duration_ms": 8720,
+      "screenshot_path": "/app/data/sandboxes/2/projects/default/bakery_preorder_app/.test-screenshots/navigation_menupage_loads.png"
+    },
+    {
+      "test_name": "Navigation: CartPage loads (auth-required page)",
+      "category": "navigation",
+      "passed": true,
+      "status_code": 200,
+      "error_message": "",
+      "duration_ms": 6617,
+      "screenshot_path": "/app/data/sandboxes/2/projects/default/bakery_preorder_app/.test-screenshots/navigation_cartpage_loads_(auth-required_page).png"
+    },
+    {
+      "test_name": "Navigation: CheckoutPage loads (auth-required page)",
+      "category": "navigation",
+      "passed": true,
+      "status_code": 200,
+      "error_message": "",
+      "duration_ms": 7806,
+      "screenshot_path": "/app/data/sandboxes/2/projects/default/bakery_preorder_app/.test-screenshots/navigation_checkoutpage_loads_(auth-required_page).png"
+    },
+    {
+      "test_name": "Navigation: OrderHistoryPage loads (auth-required page)",
+      "category": "navigation",
+      "passed": true,
+      "status_code": 200,
+      "error_message": "",
+      "duration_ms": 6617,
+      "screenshot_path": "/app/data/sandboxes/2/projects/default/bakery_preorder_app/.test-screenshots/navigation_orderhistorypage_loads_(auth-required_page).png"
+    },
+    {
+      "test_name": "Navigation: LoginPage loads",
+      "category": "navigation",
+      "passed": true,
+      "status_code": 200,
+      "error_message": "",
+      "duration_ms": 9273,
+      "screenshot_path": "/app/data/sandboxes/2/projects/default/bakery_preorder_app/.test-screenshots/navigation_loginpage_loads.png"
+    },
+    {
+      "test_name": "Navigation: RegisterPage loads",
+      "category": "navigation",
+      "passed": true,
+      "status_code": 200,
+      "error_message": "",
+      "duration_ms": 10940,
+      "screenshot_path": "/app/data/sandboxes/2/projects/default/bakery_preorder_app/.test-screenshots/navigation_registerpage_loads.png"
+    },
+    {
+      "test_name": "API: Health endpoint",
+      "category": "api",
+      "passed": true,
+      "status_code": 200,
+      "error_message": "",
+      "duration_ms": 46,
+      "screenshot_path": ""
+    },
+    {
+      "test_name": "API: GET /api/orders/",
+      "category": "api",
+      "passed": true,
+      "status_code": 401,
+      "error_message": "",
+      "duration_ms": 19,
+      "screenshot_path": ""
+    },
+    {
+      "test_name": "API: GET /api/categories/ (authenticated)",
+      "category": "api",
+      "passed": true,
+      "status_code": 200,
+      "error_message": "",
+      "duration_ms": 14,
+      "screenshot_path": ""
+    },
+    {
+      "test_name": "API: GET /api/products/ (authenticated)",
+      "category": "api",
+      "passed": true,
+      "status_code": 200,
+      "error_message": "",
+      "duration_ms": 17,
+      "screenshot_path": ""
+    },
+    {
+      "test_name": "API: GET /api/orders/ (authenticated)",
+      "category": "api",
+      "passed": true,
+      "status_code": 200,
+      "error_message": "",
+      "duration_ms": 21,
+      "screenshot_path": ""
+    },
+    {
+      "test_name": "Validation: POST /api/orders/ rejects empty payload",
+      "category": "validation",
+      "passed": true,
+      "status_code": 400,
+      "error_message": "",
+      "duration_ms": 14,
+      "screenshot_path": ""
+    },
+    {
+      "test_name": "Error: 404 for nonexistent API path",
+      "category": "error",
+      "passed": true,
+      "status_code": 404,
+      "error_message": "",
+      "duration_ms": 11,
+      "screenshot_path": ""
+    }
+  ]
+}

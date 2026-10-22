@@ -31,7 +31,7 @@ export default function CheckoutSummary({
               <div className="ds-cluster ds-between" key={item.product.id}>
                 <div className="ds-cluster" style={{ gap: '0.6rem' }}>
                   <Media
-                    src={item.product.image_url}
+                    src={item.product.imageUrl}
                     alt={item.product.name}
                     ratio="square"
                     className="ds-media-sm"

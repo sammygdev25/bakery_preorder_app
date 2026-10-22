@@ -114,6 +114,7 @@ export async function createOrder(req: AuthRequest, res: Response) {
         pickupDate,
         status: 'pending',
         totalAmount,
+        stripePaymentIntent: '',
         items: {
           create: parsed.data.items.map((item) => {
             const product = productMap.get(item.productId)!;

@@ -118,6 +118,7 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
         pickupDate,
         status: 'pending',
         totalAmount,
+        stripePaymentIntent: '',
         items: {
           create: itemsData,
         },

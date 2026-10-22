@@ -59,7 +59,7 @@ export async function createCategory(req: AuthRequest, res: Response) {
   try {
     const slug = parsed.data.slug ? slugify(parsed.data.slug) : slugify(parsed.data.name);
 
-    const existing = await prisma.category.findUnique({ where: { slug } });
+    const existing = await prisma.category.findFirst({ where: { slug } });
     if (existing) {
       return res.status(400).json({ error: 'A category with this slug already exists', code: 'validation_error' });
     }

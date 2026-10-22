@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { getOrderList } from '../api';
-import type { Order } from '../types';
+import type { Order, User as ApiUser } from '../types';
 import OrderHistoryHeader from '../components/OrderHistoryHeader';
 import OrderHistoryContent from '../components/OrderHistoryContent';
 import OrderHistoryDetails from '../components/OrderHistoryDetails';
@@ -32,6 +32,19 @@ export default function OrderHistoryPage() {
     fetchOrders();
   }, [fetchOrders]);
 
+  const apiUser: ApiUser | null = user
+    ? {
+        id: user.id,
+        email: user.email,
+        passwordHash: user.password_hash,
+        googleId: user.google_id,
+        name: user.name || `${user.first_name} ${user.last_name}`.trim() || user.username,
+        isActive: true,
+        createdAt: '',
+        updatedAt: '',
+      }
+    : null;
+
   return (
     <div className="ds-stack-lg">
       <OrderHistoryHeader userName={user?.name || user?.email} />
@@ -46,7 +59,7 @@ export default function OrderHistoryPage() {
           onSelectOrder={(id) => setSelectedOrderId(id)}
         />
       )}
-      <OrderHistoryDetails user={user} />
+      <OrderHistoryDetails user={apiUser} />
     </div>
   );
 }

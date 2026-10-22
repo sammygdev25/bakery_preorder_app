@@ -31,7 +31,7 @@ export default function CartItems({ items, onUpdateQuantity, onRemove }: CartIte
             <div className="ds-cluster ds-between">
               <div className="ds-cluster">
                 <Media
-                  src={product.image_url}
+                  src={product.imageUrl}
                   alt={product.name}
                   ratio="square"
                   className="cart-item-thumb"
